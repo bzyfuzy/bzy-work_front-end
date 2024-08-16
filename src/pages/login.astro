@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/AuthLayout.astro";
+---
+
+<Layout title="Нэврэх хэсэг">
+  <form>
+    <div class="input-field">
+      <input
+        type="text"
+        id="username"
+        name="username"
+        required
+        placeholder="  "
+      />
+      <label for="username">Утасны дугаар эсвэл и-мэйл хаяг</label>
+    </div>
+    <div class="input-field">
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+        placeholder="  "
+      />
+      <label for="password">Нууц үг</label>
+    </div>
+    <div class="footer">
+      <a href="/register">Бүртгүүлэх</a>
+      <input type="submit" name="login" value="Нэвтрэх" />
+    </div>
+  </form>
+</Layout>
