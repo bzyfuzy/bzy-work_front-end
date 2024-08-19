@@ -1,32 +1,98 @@
 ---
-import Layout from "../layouts/AuthLayout.astro";
+import axios from "axios";
+import WaiterLayout from "../layouts/WaiterLayout.astro";
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+    const username = data.get("username");
+    const password = data.get("password");
+    await axios
+      .post("https://api.devtech.work/api/auth/sign-in", {
+        username,
+        password,
+      })
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        if(e.data) {
+          console.log(e.data);
+        }
+        
+        return Astro.redirect("/login");
+      });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return Astro.redirect("/login");
+    }
+  }
+}
 ---
 
-<Layout title="Нэврэх хэсэг">
-  <form>
-    <div class="input-field">
-      <input
-        type="text"
-        id="username"
-        name="username"
-        required
-        placeholder="  "
-      />
-      <label for="username">Утасны дугаар эсвэл и-мэйл хаяг</label>
-    </div>
-    <div class="input-field">
-      <input
-        type="password"
-        id="password"
-        name="password"
-        required
-        placeholder="  "
-      />
-      <label for="password">Нууц үг</label>
-    </div>
-    <div class="footer">
-      <a href="/register">Бүртгүүлэх</a>
-      <input type="submit" name="login" value="Нэвтрэх" />
-    </div>
-  </form>
-</Layout>
+<WaiterLayout title="login">
+  <main>
+    <section class="form">
+      <form method="POST">
+        <p>Нэвтрэх хэсэг</p>
+        <input
+          placeholder="Утасны дугаар эсвэл и-мэйл хаяг"
+          name="username"
+          type="text"
+        />
+        <input placeholder="Нууц үг" name="password" type="password" />
+        <button type="submit">Нэвтрэх</button>
+        <div class="actions">
+          <a href="/register">Бүртгүүлэх</a>
+          <a href="/forget">Нууц үг сэргээх</a>
+        </div>
+      </form>
+    </section>
+    <section class="quote">
+      <p>
+        <!-- “The only true wisdom is in knowing you know nothing.” <br/> —Socrates -->
+        <!-- "Knowledge is power. Information is liberating. Education is the premise of progress, in every society, in every family." <br/> —Kofi Annan -->
+        <!-- "An investment in knowledge always pays the best interest." <br/> —Benjamin Franklin.  -->
+        <!-- “The more I learn, the more I realize how much I don't know.” <br/> —Albert Einstein -->
+        “The important thing is not to stop questioning. <br />Curiosity has its
+        own reason for existing.” <br /> —Albert Einstein.
+      </p>
+    </section>
+  </main>
+</WaiterLayout>
+
+<style lang="postcss">
+  main {
+    @apply w-screen h-screen flex overflow-hidden p-6;
+  }
+  section.form {
+    @apply flex-1 flex flex-col items-center justify-center gap-6;
+  }
+  section.quote {
+    @apply flex-[0.8] flex bg-blue-300 rounded-xl text-white items-center justify-center;
+  }
+  section.quote p {
+    @apply mx-24;
+    text-align: justify;
+	  text-align-last: center;
+  }
+  section.form form {
+    @apply flex flex-col gap-4 w-2/5; 
+  }
+  section.form form > p {
+    @apply font-bold text-slate-600 mb-3;
+  }
+  section.form form > input[type='text'], input[type='password'] {
+    @apply block w-full rounded-lg border focus:border-blue-500 p-3 text-sm font-normal text-slate-800 outline-none;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.25,.1,.25,1);
+    transition-duration: .15s;
+  }
+  section.form form > button[type='submit'] {
+    @apply inline-block w-full px-16 py-3 mt-2 mb-0 font-bold leading-normal text-center text-white align-middle transition-all bg-blue-500 border-0 rounded-lg cursor-pointer active:opacity-85 hover:shadow-sm text-sm ease-in tracking-tight shadow-md;
+  }
+  section.form div.actions {
+    @apply flex items-center justify-between w-full;
+  }
+</style>
